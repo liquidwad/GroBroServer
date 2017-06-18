@@ -1,7 +1,7 @@
 var orm = require('orm');
 
 module.exports = function(app) {
-	app.use(orm.express("mysql://root:@localhost/grobro", {
+	app.use(orm.express("mysql://liquidwad:@localhost/c9", {
 		define: function(db, models, next) {
 
 			models.User = db.define('users', {
@@ -12,9 +12,9 @@ module.exports = function(app) {
 				key_id: { type: "integer" }
 			});
 
-			models.Key = db.define('keys', {
+			models.Key = db.define('devicekeys', {
 				id: { type: 'serial', key: true },
-				key: String
+				hash_key: String
 			});
 
 			db.sync(function(err) {

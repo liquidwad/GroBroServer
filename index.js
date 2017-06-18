@@ -61,7 +61,7 @@ app.use(i18n.init);
 /* Routes */	
 require('./routes/routes')(app);
 
-app.listen(3000, function() {  
+app.listen(8080, function() {  
     console.log("GroBro server running");
 });
 

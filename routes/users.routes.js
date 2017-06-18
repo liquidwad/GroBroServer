@@ -80,7 +80,7 @@ module.exports = function(app) {
 			}
 
 			/* Check if key exists in database */
-			req.models.Key.find({ key: req.body.device_key }, function(err, keys) {
+			req.models.Key.find({ hash_key: req.body.device_key }, function(err, keys) {
 				if(err || keys.length == 0) {
 					req.flash('error', res.__("Invalid key, please try again."));
 					req.flash('body', req.body);
