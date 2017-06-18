@@ -27,12 +27,12 @@
 			<h4 class="form-signin-heading">{{__ 'Sign up to GroBro.' }}</h4>
 			<label for="name" class="sr-only">{{__ 'Name' }}</label>
 			<input type="text" name="name" class="form-control" placeholder="{{__ 'Name' }}" value="{{ body.name }}" required autofocus>
+			<label for="device_key" class="sr-only">{{__ 'Device key' }}</label>
+			<input type="text" name="device_key" class="form-control" placeholder="{{__ 'Device key' }}" value="{{ body.device_key }}" required>
 			<label for="email" class="sr-only">{{__ 'Email' }}</label>
 			<input type="email" name="email" class="form-control" placeholder="{{__ 'Email' }}" value="{{ body.email }}" required>
 			<label for="password" class="sr-only">{{__ 'Password' }}</label>
 			<input type="password" name="password" class="form-control" placeholder="{{__ 'Password' }}" required>
-			<label for="device_key" class="sr-only">{{__ 'Device key' }}</label>
-			<input type="text" name="device_key" class="form-control" placeholder="{{__ 'Device key' }}" value="{{ body.device_key }}" required>
 			<button class="btn btn-lg btn-primary btn-block" type="submit">{{__ 'Sign up' }}</button>
 		</form>
 	</div>
