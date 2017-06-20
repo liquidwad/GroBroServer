@@ -20,5 +20,6 @@
 	"Temperature": "Temperature",
 	"Humidity": "Humidity",
 	"Air": "Air",
-	"Settings": "Settings"
+	"Settings": "Settings",
+	"Light": "Light"
 }

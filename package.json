@@ -10,10 +10,12 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.17.2",
+    "cacheman-mongo": "^1.0.3",
     "connect-flash": "^0.1.1",
     "cors": "^2.8.3",
     "express": "^4.15.3",
     "express-handlebars": "^3.0.0",
+    "express-handlebars-sections": "^1.0.1",
     "express-session": "^1.15.3",
     "express-validator": "^3.2.0",
     "helmet": "^3.6.1",
@@ -21,6 +23,7 @@
     "morgan": "^1.8.2",
     "mysql": "^2.13.0",
     "orm": "^3.2.3",
-    "password-hash": "^1.2.2"
+    "password-hash": "^1.2.2",
+    "socket.io": "^2.0.3"
   }
 }

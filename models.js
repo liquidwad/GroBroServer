@@ -1,7 +1,7 @@
 var orm = require('orm');
 
 module.exports = function(app) {
-	app.use(orm.express("mysql://liquidwad:@localhost/c9", {
+	var middleware = orm.express("mysql://liquidwad:@localhost/c9", {
 		define: function(db, models, next) {
 
 			models.User = db.define('users', {
@@ -29,5 +29,9 @@ module.exports = function(app) {
 
 			next();
 		}
-	}));
+	});
+	
+	app.orm_middleware = middleware;
+	
+	app.use(middleware);
 };

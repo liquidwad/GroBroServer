@@ -3,7 +3,6 @@ module.exports = function(app) {
 		
 		if(req.session.user) {
 			res.render('home', {
-				title: "Home",
 				name: req.session.user.name
 			});
 		} else {

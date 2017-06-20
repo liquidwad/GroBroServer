@@ -13,8 +13,6 @@ module.exports = function(app) {
 
 	app.get("/login", logincheck, function(req, res) {
 		res.render('login', { 
-			isLogin: true, 
-			title: "Login",
 			body: req.flash('body')[0],
 			error: req.flash('error')
 		});
@@ -55,8 +53,6 @@ module.exports = function(app) {
 
 	app.get("/register", logincheck, function(req, res) {
 		res.render('register', { 
-			isLogin: true, 
-			title: "Register",
 			body: req.flash('body')[0],
 			error: req.flash('error'),
 			error_collection: req.flash('error_collection')

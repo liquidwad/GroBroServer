@@ -1,3 +1,10 @@
+{{#section 'title'}}Home{{/section}}
+
+{{#section 'script'}}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+  <script src="js/main.js"></script>
+{{/section}}
+
 <nav class="navbar navbar-toggleable-md fixed-top navbar-inverse bg-info">
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navcollapse" aria-controls="navcollapse" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -19,6 +26,7 @@
           <a class="dropdown-item" href="#">{{__ 'CO2' }}</a>
           <a class="dropdown-item" href="#">{{__ 'Temperature' }}</a>
           <a class="dropdown-item" href="#">{{__ 'Humidity' }}</a>
+          <a class="dropdown-item" href="#">{{__ 'Light' }}</a>
           <a class="dropdown-item" href="#">{{__ 'Air' }}</a>
         </div>
       </li>

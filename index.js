@@ -1,5 +1,6 @@
 var express = require("express");
-var handlebars  = require('express-handlebars');
+var express_handlebars  = require('express-handlebars');
+var express_handlebars_sections = require('express-handlebars-sections');
 var session = require('express-session');
 var validator = require('express-validator');
 var flash = require('connect-flash');
@@ -12,11 +13,13 @@ var i18n = require("i18n");
 var app = express();
 
 /* Sessions */
-app.use(session({
+var sharedSession = session({
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: true
-}));
+});
+
+app.use(sharedSession);
 
 /* Parse post data */
 app.use(bodyParser.urlencoded({
@@ -47,7 +50,19 @@ app.use(cors());
 app.use(express.static('public'))
 
 /* Template */
-app.engine('handlebars', handlebars({defaultLayout: 'main'}));
+/*app.engine('handlebars', handlebars({
+  defaultLayout: 'main', 
+  section: handlebars_sections() 
+}));*/
+
+var hbs = express_handlebars.create({
+  defaultLayout: 'main'
+});
+
+express_handlebars_sections(hbs);   // CONFIGURE 'express_handlebars_sections' 
+ 
+app.engine('handlebars', hbs.engine);
+
 app.set('view engine', 'handlebars');
 
 /* Localization */
@@ -61,8 +76,17 @@ app.use(i18n.init);
 /* Routes */	
 require('./routes/routes')(app);
 
-app.listen(8080, function() {  
+/* SocketIO */
+
+var server = require('http').Server(app);
+
+require('./state')(server, sharedSession, app.orm_middleware);
+
+server.listen(8080, function() {  
     console.log("GroBro server running");
 });
 
-module.exports = app;  
+
+/*app.listen(8080, function() {  
+    console.log("GroBro server running");
+});*/
