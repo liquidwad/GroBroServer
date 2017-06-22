@@ -95,11 +95,14 @@ module.exports = function(app, server, sessionMiddleware, ormMiddleware) {
                 
                     if(index != -1) {
                         value.devices[index] = data;
-                        cache.putSync(client.key, value);
-                        
-                        console.log("Device", client.key, "has been updated");
                     }
+                } else {
+                    value.devices.push(data);
                 }
+                
+                cache.putSync(client.key, value);
+                        
+                console.log("Device", client.key, "has been updated");
                 
                 /* Get other users and send the data to them */
                 var grobro_users = _.filter(clients, function(value, key) {
