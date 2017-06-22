@@ -1,55 +1,118 @@
-var CachemanMongo = require('cacheman-mongo');
-var cache = new CachemanMongo();
+var query = require('array-query');
+var _ = require('lodash');
 
-module.exports = function(app, sessionMiddleware, ormMiddleware) {
-    var io = require('socket.io')(app);
+module.exports = function(app, server, sessionMiddleware, ormMiddleware) {
+    var io = require('socket.io')(server);
+
+    var cache = app.cache;
     
     io.use(function(socket, next) {
         sessionMiddleware(socket.request, socket.request.res, next);
     });
-    
+
     io.use(function(socket, next) {
         ormMiddleware(socket.request, socket.request.res, next);
     });
-    
+
     //socket.request.session
-    var clients = {}
-    
+    var clients = {};
+
     io.on('connection', function(socket) {
-        
+
         /* Register web users */
-        if(socket.request.session.user) {
-            socket.request.models.Key.find({ id: socket.request.session.user.key_id }, function(err, keys) {
-               if(err || keys.length == 0) {
-                   console.log("Error happened while retrieving key.");
-                   return;
-               }
-               
-               clients[socket.id] = {
-                   socket: socket,
-                   key: keys[0].hash_key
-               }
-               
-               console.log(socket.id, "web has registed on", keys[0].hash_key);
+        if (socket.request.session.user) {
+            socket.request.models.Key.find({
+                id: socket.request.session.user.key_id
+            }, function(err, keys) {
+                if (err || keys.length == 0) {
+                    console.log("Error happened while retrieving key.");
+                    return;
+                }
+
+                clients[socket.id] = {
+                    socket: socket,
+                    key: keys[0].hash_key
+                }
+
+                console.log("Client", socket.id, "has registed through web on device", keys[0].hash_key);
             });
-        } else {
-            clients[socket.id] = { socket: socket };
         }
-        
+        else {
+            clients[socket.id] = {
+                socket: socket
+            };
+        }
+
         /* When socket hasn't been detected as webclient */
         socket.on('register_device', function(data) {
-            if(typeof data !== 'undefined' || 'key' in data) {
-                clients[socket.id] = { 
-                    socket: socket, 
-                    isDevice: true, 
-                    key: data.key 
+            if (typeof data !== 'undefined' || 'key' in data) {
+                clients[socket.id] = {
+                    socket: socket,
+                    isDevice: true,
+                    key: data.key
                 };
+
+                console.log("Device", socket.id, "has registered on device", data.key);
+            }
+        });
+
+        /* Send device data to user */
+        socket.on('pull', function() {
+            var client = clients[socket.id];
+            var data = cache.getSync(client.key);
             
-                console.log(socket.id, "device has registered on", data.key);
+            if(data) {
+                socket.emit('recieve', data);
+            } else {
+                socket.emit('recieve', {});
             }
         });
         
+        /* Save device data */
         socket.on('push', function(data) {
+
+            var client = clients[socket.id];
+
+            var value = cache.getSync(client.key);
+
+            /* Cache new GroBro */
+            if (!value) {
+                var grobro = {};
+                grobro['devices'] = [];
+                grobro.devices.push(data);
+                cache.putSync(client.key, grobro);
+                
+                console.log("client", client.key, "has been added to cache");
+            }
+            else if (value) {
+                /* Update existing cache */
+                
+                /* Find and replace channel */
+                var channels = query('channel_name').is(data.channel_name).on(value.devices);
+                
+                if(channels.length > 0) {
+                    var index = value.devices.indexOf(channels[0]);
+                
+                    if(index != -1) {
+                        value.devices[index] = data;
+                        cache.putSync(client.key, value);
+                        
+                        console.log("Device", client.key, "has been updated");
+                    }
+                }
+                
+                /* Get other users and send the data to them */
+                var grobro_users = _.filter(clients, function(value, key) {
+                    return value.key == client.key; /* && value.socket.id != socket.id; */
+                });
+                
+                _.forEach(grobro_users, function(value, key) {
+                    value.socket.emit("update", data);
+                });
+                
+                console.log(grobro_users.length + " user(s) have been notified of update.");
+            }
+            
             /*{ 
                 'device_key': 'RASPBERRYPIDEVICEKEY',
                 'channel_name': 'Ventilator',
@@ -58,20 +121,14 @@ module.exports = function(app, sessionMiddleware, ormMiddleware) {
                     'status': 'off'
                 }
             }*/
-            
-            //Recieve Data from GroBro -> save in cache + update webapp
-            //Recieve Data from Webapp -> save in cache + update grobro
-            //Save to cache
-            //If it's raspberry pi, send to webusers
-            //If it's a webuser, send to other webusers and raspberry pi
         });
-        
+
         socket.on('disconnect', function() {
             delete clients[socket.id];
         });
     });
-    
+
     io.listen(2000);
-    
+
     console.log("SocketIO Started");
 };

@@ -80,7 +80,13 @@ require('./routes/routes')(app);
 
 var server = require('http').Server(app);
 
-require('./state')(server, sharedSession, app.orm_middleware);
+/* Setup caching */
+var cache = require('persistent-cache');
+
+app.cache = cache();
+
+/* Setup socketIO server with models and sessions */
+require('./state')(app, server, sharedSession, app.orm_middleware);
 
 server.listen(8080, function() {  
     console.log("GroBro server running");
