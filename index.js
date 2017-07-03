@@ -41,10 +41,10 @@ require("./models")(app);
 app.use(morgan("common"));
 
 /* Security */
-app.use(helmet());
+//app.use(helmet());
 
 /* CORS */
-app.use(cors());
+//app.use(cors());
 
 /* Static files */
 app.use(express.static('public'))

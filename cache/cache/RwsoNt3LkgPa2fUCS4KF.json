@@ -1,1 +1,1 @@
-{"data":{"devices":[{"channel_name":"Ventilator","data":{"override":false,"status":"off"}}]}}
+{"data":[{"channel_name":"Ventilator","data":{"override":true,"status":"on"}},{"channel_name":"Icebox","data":{"override":true,"status":"on"}},{"channel_name":"Dog","data":{"override":true,"status":"on"}},{"available":true,"channel_name":"temperature","type":"sensor","data":{"override":false,"status":71.61122692515116}},{"available":true,"channel_name":"humidity","type":"sensor","data":{"override":false,"status":50.65981204826719}},{"channel_name":"whore","henek":"whore"}]}

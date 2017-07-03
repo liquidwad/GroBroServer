@@ -1,5 +1,6 @@
 var query = require('array-query');
 var _ = require('lodash');
+var json_merger = require('json_merger');
 
 module.exports = function(app, server, sessionMiddleware, ormMiddleware) {
     var io = require('socket.io')(server);
@@ -18,7 +19,9 @@ module.exports = function(app, server, sessionMiddleware, ormMiddleware) {
     var clients = {};
 
     io.on('connection', function(socket) {
-
+    
+        console.log("Client connected");
+        
         /* Register web users */
         if (socket.request.session.user) {
             socket.request.models.Key.find({
@@ -57,14 +60,18 @@ module.exports = function(app, server, sessionMiddleware, ormMiddleware) {
         });
 
         /* Send device data to user */
-        socket.on('pull', function() {
+        socket.on('pull', function(data, cb) {
             var client = clients[socket.id];
             var data = cache.getSync(client.key);
             
+            if(!cb) {
+                return;
+            }
+            
             if(data) {
-                socket.emit('recieve', data);
+                cb(data);
             } else {
-                socket.emit('recieve', {});
+                cb({});
             }
         });
         
@@ -77,27 +84,30 @@ module.exports = function(app, server, sessionMiddleware, ormMiddleware) {
 
             /* Cache new GroBro */
             if (!value) {
-                var grobro = {};
-                grobro['devices'] = [];
-                grobro.devices.push(data);
+                var grobro = [];
+                grobro.push(data);
                 cache.putSync(client.key, grobro);
-                
                 console.log("client", client.key, "has been added to cache");
             }
             else if (value) {
                 /* Update existing cache */
                 
                 /* Find and replace channel */
-                var channels = query('channel_name').is(data.channel_name).on(value.devices);
+                var channels = query('channel_name').is(data.channel_name).on(value);
                 
                 if(channels.length > 0) {
-                    var index = value.devices.indexOf(channels[0]);
+                    var index = value.indexOf(channels[0]);
                 
                     if(index != -1) {
-                        value.devices[index] = data;
+                        
+                        console.log("New update", data);
+                        
+                        value[index] = json_merger.merge(channels[0], data);
+                        
+                        console.log("Merged", value[index]);
                     }
                 } else {
-                    value.devices.push(data);
+                    value.push(data);
                 }
                 
                 cache.putSync(client.key, value);
@@ -106,7 +116,7 @@ module.exports = function(app, server, sessionMiddleware, ormMiddleware) {
                 
                 /* Get other users and send the data to them */
                 var grobro_users = _.filter(clients, function(value, key) {
-                    return value.key == client.key; /* && value.socket.id != socket.id; */
+                    return value.key == client.key && value.socket.id != socket.id;
                 });
                 
                 _.forEach(grobro_users, function(value, key) {
@@ -128,10 +138,11 @@ module.exports = function(app, server, sessionMiddleware, ormMiddleware) {
 
         socket.on('disconnect', function() {
             delete clients[socket.id];
+            console.log("Client disconnected");
         });
     });
 
-    io.listen(2000);
+   //io.listen(2000);
 
     console.log("SocketIO Started");
 };
