@@ -54,17 +54,24 @@ module.exports = function(app, server, sessionMiddleware, ormMiddleware) {
                     isDevice: true,
                     key: data.key
                 };
-
+                
                 console.log("Device", socket.id, "has registered on device", data.key);
             }
         });
 
         /* Send device data to user */
-        socket.on('pull', function(data, cb) {
+        socket.on('pull', function(cb) {
             var client = clients[socket.id];
+            
+            //console.log(client);
+            
+            if(typeof client.key === 'undefined') {
+                return;
+            }
+
             var data = cache.getSync(client.key);
             
-            if(!cb) {
+            if(typeof cb === 'undefined' || typeof cb !== 'function') {
                 return;
             }
             
@@ -79,6 +86,10 @@ module.exports = function(app, server, sessionMiddleware, ormMiddleware) {
         socket.on('push', function(data) {
 
             var client = clients[socket.id];
+            
+            if(typeof client.key === 'undefined') {
+                return;
+            }
 
             var value = cache.getSync(client.key);
 
@@ -125,15 +136,6 @@ module.exports = function(app, server, sessionMiddleware, ormMiddleware) {
                 
                 console.log(grobro_users.length + " user(s) have been notified of update.");
             }
-            
-            /*{ 
-                'device_key': 'RASPBERRYPIDEVICEKEY',
-                'channel_name': 'Ventilator',
-                'data': {
-                    'override': false,
-                    'status': 'off'
-                }
-            }*/
         });
 
         socket.on('disconnect', function() {

@@ -1,0 +1,36 @@
+.title {
+    margin-bottom: 10px;
+}
+
+.name {
+    text-align: center;
+    height: 40px;
+}
+
+.name:hover .edit {
+    display: inline-block;
+    -webkit-transition: display 2s; /* Safari */
+    transition: display 2s;
+}
+
+.name .edit {
+    display: none;
+    position: absolute;
+    margin-left: 5px;
+    border-radius: 20px;
+    border: 1px solid #000;
+}
+
+.status-button {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.on {
+    color: green;
+}
+
+.off {
+    color: red;
+}

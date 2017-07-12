@@ -280,3 +280,13 @@ textarea {
         page-break-after: avoid;
     }
 }
+
+
+
+/* START CUSTOM CODE */
+
+.navbar {
+    margin-bottom: 20px !important;
+}
+
+

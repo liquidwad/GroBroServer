@@ -1,0 +1,22 @@
+<div class="title">
+    <!--<b>{{ relay.channel_name }}</b> - -->
+</div>
+
+<img (click)="toggle($event)" (dblclick)="auto($event)" class="status-button" [src]="img">
+
+<div class="name" *ngIf="!isEdit" (click)="edit($event)">
+    <b>{{ text }}</b> -
+    <span class="on" *ngIf="relay.data.status">On</span><span class="off" *ngIf="!relay.data.status">Off</span>
+    <button class="edit" (click)="edit($event)">
+        <i class="fa fa-pencil" aria-hidden="true"></i>
+    </button>
+</div>
+
+<div class="name" *ngIf="isEdit">
+    <div class="input-group">
+        <input type="text" class="form-control" [(ngModel)]="text" maxlength="6">
+        <span class="input-group-btn">
+        <button class="btn btn-secondary" type="button" (click)="save($event)">Save</button>
+      </span>
+    </div>
+</div>

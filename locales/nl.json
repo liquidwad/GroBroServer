@@ -1,3 +1,11 @@
 {
-	
+	"Login": "Login",
+	"Sign up": "Sign up",
+	"Log in to GroBro.": "Log in to GroBro.",
+	"Email": "Email",
+	"Password": "Password",
+	"Log in": "Log in",
+	"Invalid email.": "Invalid email.",
+	"Password requires 8 to 16 characters.": "Password requires 8 to 16 characters.",
+	"Home": "Home"
 }
