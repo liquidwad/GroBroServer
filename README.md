@@ -1,2 +1,2 @@
-# GroBroServer
-Server for GroBro product
+# WallWardenServer
+Server for WallWarden product

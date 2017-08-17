@@ -1,0 +1,40 @@
+.add-dialog {
+    margin: 0 !important;
+}
+
+.add-dialog .close {
+    color: red;
+}
+
+.add-dialog .modal-content {
+    box-shadow: none !important;
+}
+
+.rules {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.overview {
+    border: 1px solid #e5e5e5;
+    margin-top: 20px;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.rule {
+    padding: 10px;
+    border: 1px solid #e5e5e5;
+    margin-top: 10px;
+}
+
+.rule .title {
+    display: block;
+}
+
+.rule .group { 
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

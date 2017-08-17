@@ -1,13 +1,11 @@
 <div class="row">
-    <div class="col-lg-12">
-      <h1>Plugs</h1>
+  <div class="col-lg-12">
+    <h1>Plugs</h1>
+  </div>
       
-      <div *ngIf="relays.length == 0">
-        <span>No appropriate plug information.</span>
-      </div>
-      
-      <div class="row">
-        <relay class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-xs-6" *ngFor="let relay of relays" [relay]="relay" [lcds]="lcds"></relay>
-      </div>
-    </div>
+  <div class="col-lg-12" *ngIf="relays.length == 0">
+    <span>No appropriate plug information.</span>
+  </div>
+  
+  <relay class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-xs-6" *ngFor="let relay of relays" [relay]="relay" [lcds]="lcds"></relay>
 </div>

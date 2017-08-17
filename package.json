@@ -1,7 +1,7 @@
 {
-  "name": "grobro",
+  "name": "wallwarden",
   "version": "1.0.0",
-  "description": "GroBro server",
+  "description": "WallWarden server",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@angular/core": "^4.3.0",
+    "angular-gauge": "^2.0.0",
     "array-query": "^0.1.2",
     "body-parser": "^1.17.2",
     "connect-flash": "^0.1.1",
@@ -27,6 +29,8 @@
     "orm": "^3.2.3",
     "password-hash": "^1.2.2",
     "persistent-cache": "^1.1.1",
-    "socket.io": "^2.0.3"
+    "rxjs": "^5.4.2",
+    "socket.io": "^2.0.3",
+    "zone.js": "^0.8.14"
   }
 }

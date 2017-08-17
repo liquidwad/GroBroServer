@@ -1,0 +1,49 @@
+<div class="group">
+    <button class="btn btn-default new-group" (click)="addGroup()">New group</button>
+    <button *ngIf="removeable" type="button" class="close" data-dismiss="modal" aria-label="Remove" (click)="remove.emit(null)">
+            <span aria-hidden="true">&times;</span>
+    </button>
+    <div>
+        <div class="drop_area" dnd-droppable [dropZones]="['AREA']" (onDropSuccess)="addSensor($event)">
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1">Condition</span>
+                <select class="form-control" [(ngModel)]="data.op">
+                    <option *ngFor="let name of operations" [selected]="data.op == name">{{ name }}</option>
+                </select>
+            </div>
+            <table class="table" *ngIf="(data.conditions | conditionfilter:'sensors').length > 0">
+                <tr>
+                    <td>Name</td>
+                    <td>Condition</td>
+                    <td>Value</td>
+                    <td></td>
+                </tr>
+                <tr *ngFor="let condition of (data.conditions | conditionfilter:'sensors')">
+                    <td>{{ condition.sensor }}</td>
+                    <td>
+                        <select class="form-control" [(ngModel)]="condition.op">
+                            <option *ngFor="let name of conditions" [selected]="condition.op == name">{{ name }}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input class="form-control" type="text" value="0" [(ngModel)]="condition.value">
+                    </td>
+                    <td>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Remove" (click)="removeCondition(condition)">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="drag_area" *ngIf="(data.conditions | conditionfilter:'sensors').length == 0">
+                <span>Drag sensor here.</span>
+            </div>
+            
+            <div *ngIf="(data.conditions | conditionfilter:'groups').length > 0">
+                <hr>
+                <group *ngFor="let condition of (data.conditions | conditionfilter:'groups')" [removeable]="true" [(_data)]="data.conditions[data.conditions.indexOf(condition)]" (remove)="removeCondition(condition)"></group>
+            </div>
+        </div>
+    </div>
+</div>

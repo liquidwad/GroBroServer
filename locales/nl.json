@@ -7,5 +7,7 @@
 	"Log in": "Log in",
 	"Invalid email.": "Invalid email.",
 	"Password requires 8 to 16 characters.": "Password requires 8 to 16 characters.",
-	"Home": "Home"
+	"Home": "Home",
+	"Incorrect username or password.": "Incorrect username or password.",
+	"Log in to WallWarden.": "Log in to WallWarden."
 }

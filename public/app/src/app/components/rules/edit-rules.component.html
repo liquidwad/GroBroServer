@@ -1,0 +1,112 @@
+<div class="col-lg-12">
+    <div class="add-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Edit `{{ rule.channel_name }}`</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="setEditMode(false)">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h3>Sensors</h3>
+                            </div>
+                        </div>
+
+                        <div class="row rule-drag-area">
+                            <!-- SENSORS -->
+                            <div class="col-lg-4 sensors">
+                                <ul class="draggable">
+                                    <li *ngFor="let sensor of sensors" dnd-draggable [dragData]="sensor" [dropZones]="['AREA']">{{ sensor.channel_name }}</li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-8">
+                                <group [_data]="rule.condition" class="main-group" #maingroup></group>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h3>Actuators</h3>
+                            </div>
+                        </div>
+
+                        <div class="row rule-drag-area row-eq-height">
+                            <!-- PLUGS -->
+                            <div class="col-lg-4">
+                                <ul class="draggable">
+                                    <li *ngFor="let actuator of actuators" dnd-draggable [dragData]="actuator" [dropZones]="['actuators']">
+                                        {{ actuator.display || actuator.channel_name }}
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="drop_area" dnd-droppable [dropZones]="['actuators']" (onDropSuccess)="addActuator($event)">
+                                    <table class="table" *ngIf="dragged_actuators.length > 0">
+                                        <tr>
+                                            <td>Name</td>
+                                            <td>Action</td>
+                                            <td>Option</td>
+                                        </tr>
+                                        <tr *ngFor="let actuator of dragged_actuators">
+                                            <div *ngIf="actuator.actuator.display != undefined; then relayNameTemplate"></div>
+                                            <div *ngIf="actuator.actuator.display == undefined; then ledNameTemplate"></div>
+                                            
+                                            <ng-template #ledNameTemplate>
+                                                <td>{{ actuator.actuator.channel_name }}</td>
+                                            </ng-template>
+                                            <ng-template #relayNameTemplate>
+                                                <td>{{ actuator.actuator.display }}</td>
+                                            </ng-template>
+                                            
+                                            <div *ngIf="actuator.actuator.channel_subtype == 'lcd'; then ledInputTemplate"></div>
+                                            <div *ngIf="actuator.actuator.channel_subtype == 'relay'; then relayInputTemplate"></div>
+                                            
+                                            <ng-template #ledInputTemplate>
+                                                <td>
+                                                    <span>Set to </span>
+                                                	<input class="form-control" type="text" value="100" [(ngModel)]="actuator.value">
+                                                	<span> % brightness.</span>
+                                                </td>
+                                            </ng-template>
+                                            <ng-template #relayInputTemplate>
+                                                <td>
+                                                	<select [(ngModel)] = "actuator.value">
+                                                		<option value="Off">Off</option>
+                                                		<option value="On">On</option>
+                                                	</select>
+                                                </td>
+                                            </ng-template> 
+                                            <td>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Remove" (click)="removeActuator(actuator)">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <div class="drag_area" *ngIf="dragged_actuators.length == 0">
+                                        <span>Drag device here.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <input type="text" class="form-control" placeholder="Name" value="{{ rule.channel_name }}" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="setEditMode(false)">Close</button>
+                <button type="button" class="btn btn-primary" (click)="save(maingroup)">Edit Rule</button>
+            </div>
+        </div>
+    </div>
+</div>

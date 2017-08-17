@@ -8,11 +8,12 @@ import 'rxjs/add/operator/map'
 export class BroService {
     data = null;
     
+    private update_subject = new Subject<any>();
     private subject = new Subject<any>();
     
     constructor(private socket: Socket) {
-        this.socket.on('update', (data) => {
-           if(data != null && this.data != null) {
+        this.socket.on('update', (data) => {    
+            if(data != null && this.data != null) {
                var idx = this.data.findIndex(c => c.channel_name == data.channel_name);
 
                if(idx >= 0) {
@@ -22,9 +23,13 @@ export class BroService {
                    };
                }
                
-               this.subject.next(this.data);
+               this.update_subject.next(this.data);
            }
         });
+    }
+    
+    on_update() {
+        return this.update_subject.asObservable();
     }
     
     pull() {
@@ -38,5 +43,9 @@ export class BroService {
     
     push(data) {
         this.socket.emit('push', data);
+    }
+    
+    getData() {
+        return this.data;
     }
 }

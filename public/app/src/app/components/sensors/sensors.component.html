@@ -1,12 +1,13 @@
 <div class="row">
-    <div class="col-lg-12">
-      <h1>Sensors</h1>
+  <div class="col-lg-12">
+    <h1>Sensors</h1>
+  </div>
+  
+  <div class="col-lg-12" *ngIf="sensors.length == 0">
+    <span>No appropriate sensor information.</span>
+  </div>
       
-      <div *ngIf="sensors.length == 0">
-        <span>No appropriate sensor information.</span>
-      </div>
-      
-      <div class="row">
-      </div>
-    </div>
+  <div *ngIf="sensors.length > 0">
+    <sensor *ngFor="let sensor of sensors" [sensor]="sensor"></sensor>
+  </div>
 </div>

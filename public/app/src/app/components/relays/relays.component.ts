@@ -11,13 +11,15 @@ export class RelaysComponent {
   lcds = [];
   
   constructor(private broService : BroService) {
-    this.broService.pull().subscribe(data => {
+    var subscription = this.broService.pull().subscribe(data => {
       if(Object.keys(data).length === 0 && data.constructor === Object) {
         return;
       }
       
       this.relays = data.filter(c => c.channel_subtype == "relay");
       this.lcds = data.filter(c => c.channel_subtype == "lcd");
+      
+      subscription.unsubscribe();
     });
   }
 }

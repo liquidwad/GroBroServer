@@ -1,0 +1,25 @@
+<h1>Settings</h1>
+
+<div class="row">
+    <div class="col-lg-12">
+        <h2>Temperature</h2>
+
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Unit of measurement ({{selected_unit}}) <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+            <li *ngFor="let unit of units"><a (click)="changeUnit(unit)">{{ unit }}</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-lg-12">
+        <h2>LED Profiles</h2>
+        <canvas #chartA=base-chart baseChart width="400" height="200"
+                [datasets]="lineChartData"
+                [options]="lineChartOptions"
+                [legend]="lineChartLegend"
+                [chartType]="lineChartType"></canvas>
+    </div>
+</div>
+

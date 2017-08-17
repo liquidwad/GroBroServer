@@ -89,8 +89,13 @@ app.cache = cache();
 require('./state')(app, server, sharedSession, app.orm_middleware);
 
 server.listen(8080, function() {  
-    console.log("GroBro server running");
+    console.log("WallWarden server running");
 });
+
+process.on('uncaughtException', function(err) {
+    // handle the error safely
+    console.log(err)
+})
 
 
 /*app.listen(8080, function() {  

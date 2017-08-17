@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BroService } from '../../services/bro.service'; 
 
 @Component({
@@ -6,16 +6,28 @@ import { BroService } from '../../services/bro.service';
   templateUrl: './sensors.component.html',
   styleUrls: ['./sensors.component.css']
 })
-export class SensorsComponent {
+export class SensorsComponent implements OnInit, OnDestroy {
   sensors = [];
-    
+  
   constructor(private broService : BroService) {
-    this.broService.pull().subscribe(data => {
+  }
+  
+  ngOnInit() {
+    var subscription = this.broService.pull().subscribe((data) => {
       if(Object.keys(data).length === 0 && data.constructor === Object) {
         return;
       }
-          
+        
       this.sensors = data.filter(c => c.channel_type == "sensor");
+      
+      subscription.unsubscribe();
     });
+    
+    /*this.update_subscription = this.broService.on_update().subscribe(data => {
+       this.sensors = data.filter(c => c.channel_type == "sensor");
+    });*/
+  }
+  
+  ngOnDestroy() {
   }
 }

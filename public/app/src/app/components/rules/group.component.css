@@ -1,0 +1,36 @@
+.close {
+    color: red;
+}
+
+.group {
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid #e5e5e5;
+    margin-bottom: 20px;
+    padding-bottom: 0px;
+}
+
+.group .new-group {
+    margin-bottom: 20px;
+}
+
+.drag_area {
+    display: table; 
+    width: 100%; 
+    height: 100%;
+    min-height: 100px;
+}
+
+.drag_area span {
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle
+}
+
+.drop_area {
+    display: table;
+    width: 100%; 
+    height: 100%;
+    min-height: 200px;
+    /* margin-bottom: 20px; */
+}
