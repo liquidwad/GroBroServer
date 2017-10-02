@@ -7,7 +7,7 @@ import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
 import { DndModule } from 'ng2-dnd';
 import { ModalModule } from 'angular2-modal';
 import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
-import { ChartsModule } from 'ng2-charts';
+import { D3Service } from 'd3-ng2-service';
 
 import { AppComponent } from './app.component';
 
@@ -26,6 +26,7 @@ import { ConditionFilter } from './pipes/condition-filter.pipe';
 
 /* Settings */
 import { SettingsComponent } from './components/settings/settings.component'; 
+import { LedSettingsComponent } from './components/settings/led-settings.component';
 
 /* Services */
 import { BroService } from './services/bro.service';
@@ -52,6 +53,7 @@ const appRoutes: Routes = [
     
     /* Settings */
     SettingsComponent,
+    LedSettingsComponent,
     
     /* Pages */
     HomeComponent,
@@ -71,7 +73,6 @@ const appRoutes: Routes = [
     BootstrapModalModule,
     BrowserModule,
     FormsModule,
-    ChartsModule,
     SocketIoModule.forRoot(config),
     DndModule.forRoot()
   ],

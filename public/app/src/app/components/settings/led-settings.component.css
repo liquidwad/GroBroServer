@@ -1,0 +1,9 @@
+.profile {
+    border: 1px solid black;
+    margin-bottom: 10px;
+    width: 750px;
+}
+
+.profile-options { 
+    margin-bottom: 20px;
+}
