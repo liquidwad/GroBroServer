@@ -2,7 +2,17 @@
 <div class="profile"></div>
 <div class="profile-options">
     <div class="btn-group" role="group">
-        <button class="btn btn-default" (click)="apply()">Apply</button>
-        <button class="btn btn-default" (click)="resetPoints()">Reset</button>
+        <button class="btn btn-default" (click)="save()">Save</button>
+        <button class="btn btn-default" (click)="reset()">Reset</button>
+        <button class="btn btn-default" (click)="resetAll()">Reset All</button>
+    </div>
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Duplicate from ({{chan_names[copy_chan]}}) <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li *ngFor="let ch of chan_names"><a (click)="selectChanToCopy(ch)">{{ ch }}</a></li>
+        </ul>
+        <button class="btn btn-default" (click)="duplicate()">Duplicate</button>
     </div>
 </div>
