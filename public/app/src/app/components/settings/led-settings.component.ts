@@ -31,11 +31,40 @@ export class LedSettingsComponent implements OnInit, OnDestroy {
     chan_colors = ["red", "green", "blue", "black"];
     selection = 2;
     copy_chan = 0;
+    toggle_mode = null;
     
     constructor(private broService : BroService) {
     }
     
-    
+    secondsToHms(d) {
+        d = Number(d);
+        var h = Math.floor(d / 3600);
+        var m = Math.floor(d % 3600 / 60);
+        var s = Math.floor(d % 3600 % 60);
+        var status = "am";
+        
+        if(h >= 12) {
+          status = "pm";
+          h = h - 12;
+        }
+        
+        var hours = h.toString();
+        var minutes = m.toString();
+        
+        if(hours.length == 1) {
+          hours = '0' + hours;
+          
+          if(hours == '00') {
+            hours = '12';
+          }
+        }
+        
+        if( minutes.length == 1) {
+          minutes = '0' + minutes;
+        }
+        
+        return hours + ":" + minutes + " " + status;
+    }
     ngOnInit() {
         this.rightBisector = d3.bisector(function(a, b) { return a[0]-b[0]; }).right;
         this.leftBisector = d3.bisector(function(a, b) { return a[0]-b[0]; }).left;
@@ -92,9 +121,18 @@ export class LedSettingsComponent implements OnInit, OnDestroy {
             .offset([-10, 50])
             .html(function(d) {
               var x0 = x.invert(d3.mouse(d3.event.currentTarget)[0]);
+              
+              if(x0 < 0 || x0 > 24) {
+                //Nothing to display bruh out of bound
+                return "";
+              }
+              
               var y0 = y.invert(d3.mouse(d3.event.currentTarget)[1]);
-              var brightness = "<strong>Brightness:</strong> <span style='color:red'>" + y0 +  "</span>";
-              var time = "<strong>Time:</strong> <span style='color:red'>" + x0 + "</span>";
+              
+              var kehb = ((x0 * 60) * 60);
+
+              var brightness = "<strong>Brightness:</strong> <span style='color:red'>" + y0.toPrecision(2) +  "</span>";
+              var time = "<strong>Time:</strong> <span style='color:red'>" + dad.secondsToHms(kehb) + "</span>";
               return brightness + "  " + time;
             });
             
@@ -128,9 +166,25 @@ export class LedSettingsComponent implements OnInit, OnDestroy {
             	.style("fill", dad.chan_colors[spot])         
             	.on("click", function(){
             	  console.log("ch" + spot + " selected");
+            	  
+            	  if(dad.toggle_mode == spot) {
+            	    for( var j = 0; j < dad.num_chans; j++)
+            	  	{
+            	  	  d3.select('#' + dad.chan_names[j]).style("opacity", 1.0);
+              		  d3.select('#legend' + j).style("opacity", 1.0);
+            	  	}
+            	  	
+            	  	dad.toggle_mode = null;
+            	  	
+            	  	dad.redraw();
+                  dad.redraw();
+            	  	return;
+            	  }
+            	  
             		d3.select('#' + dad.chan_names[spot]).style("opacity", 1.0);
             		d3.select('#legend' + spot).style("opacity", 1.0);
             		dad.selection = spot;
+            		dad.toggle_mode = spot;
             		for( var j = 0; j < dad.num_chans; j++)
             		{
             		  if( j != spot )

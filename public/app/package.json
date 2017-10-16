@@ -38,6 +38,7 @@
     "ng-canvas-gauges": "^1.0.5",
     "ng-socket-io": "^0.1.10",
     "ng2-charts": "^1.6.0",
+    "ng2-datetime": "^1.4.0",
     "ng2-dnd": "^4.2.0",
     "rxjs": "^5.1.0",
     "zone.js": "^0.8.4"
